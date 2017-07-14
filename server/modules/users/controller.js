@@ -19,18 +19,20 @@ export default function validateSignup(data){
 }
 
 
-export const login = async (req, res)=>{
+export const currentUser = async (req, res)=>{
   // const{errors, isValid} = validateLogin(req.body)
   //req.id = req.params.id
   console.log("something was here ************");
-  console.log(req.params.email);
   console.log(req.params);
-  // console.log(req.id);
-  req.params.id
+  console.log(req.params.id);
+  console.log(req.params.id);
+
+  console.log(req.id);
+  // req.params.id
   const{email} = req.body
   if(true){
     try {
-      return res.status(200).json({token: await User.findOne({'email': req.params.email})})
+      return res.status(200).json({currentUser: await User.findOne({'_id': req.params.id})})
     }
     catch(err){
       return res.status(err.status).json({error: true, message:"User doesn't exist"})
