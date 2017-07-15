@@ -1,6 +1,10 @@
 import mongoose, {Schema} from 'mongoose'
 
 let connectionsSchema = new Schema({
+  connection_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  } ,
   title: {
     type: String,
     unique: false,
@@ -23,7 +27,7 @@ let connectionsSchema = new Schema({
   },
   user_id: {
     type: Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
   }
   }, {timestamps:true});
 
