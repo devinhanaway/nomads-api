@@ -1,3 +1,3 @@
-import userRoutes from './routes'
+import userRouter from './routes'
 
-export {userRoutes} 
+export {userRouter} 

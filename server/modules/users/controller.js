@@ -104,16 +104,6 @@ export const loginAuth = (req, res)=>{
   res.status(400).json({errors})
 
 }
-  // console.log(currentUser);
-  // if(true){
-  //   try {
-  //     return res.status(200).json({user: await User.findOne({'email': req.body.email})
-  //   })
-  //   }
-  //   catch(err){
-  //     return res.status(err.status).json({error: true, message:"User doesn't exist"})
-  //   }
-  // }
 }
 
  export const signup = async (req, res)=>{
@@ -126,7 +116,13 @@ export const loginAuth = (req, res)=>{
 
       try{
         console.log("something");
-        return res.status(200).json({user: await newUser.save()})
+        const token = jwt.sign({
+          id: newUser.id,
+          title: newUser.title,
+          email: newUser.email,
+        }, config.jwtSecret)
+        await newUser.save()
+        return res.status(200).json({token: await token})
       }
       catch (err){
         return res.status(err.status).json({error: true, message:"There was an error"})

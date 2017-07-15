@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import {userRoutes, loginRoutes} from './modules'
+import {userRouter, connectionsRouter} from './modules'
 import db from "./config/db"
 import middleware from './config/middleware'
 const app = express()
@@ -10,7 +10,7 @@ middleware(app)
 const port = process.env.PORT || 8080
 
 // app.use(cors())
-app.use('/api', [userRoutes, loginRoutes])
+app.use('/api', [userRouter, connectionsRouter])
 
 
 

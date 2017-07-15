@@ -1,6 +1,6 @@
 import mongoose, {Schema} from 'mongoose'
 
-let firstfriends = new Schema({
+let connectionsSchema = new Schema({
   title: {
     type: String,
     unique: false,
@@ -20,8 +20,13 @@ let firstfriends = new Schema({
     type: String,
     unique: false,
     required: true
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
   }
+  }, {timestamps:true});
 
-}, {timestamps:true});
 
-export default mongoose.model('Firstfriends', firstfriendsSchema)
+
+export default mongoose.model('Connections', connectionsSchema)
