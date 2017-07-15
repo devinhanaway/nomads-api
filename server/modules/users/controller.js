@@ -6,7 +6,7 @@ import config from '../config'
 
 
 
-export default function validateSignup(data){
+export function validateSignup(data){
   let errors = {}
   if(data.title === "") errors.title = "Please Provide a Title"
   if(data.email === "") errors.email = "Please Provide a Email"

@@ -8,7 +8,7 @@ let connectionsSchema = new Schema({
   } ,
   email: {
     type: String,
-    unique: true,
+    unique: false,
     required: true
   } ,
   location: {
@@ -21,7 +21,7 @@ let connectionsSchema = new Schema({
     unique: false,
     required: true
   },
-  user: {
+  user_id: {
     type: Schema.Types.ObjectId,
     ref: "User"
   }

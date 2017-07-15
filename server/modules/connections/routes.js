@@ -3,7 +3,8 @@ import * as connectionsController from './controller'
 
 const connectionsRouter = new Router()
 
-// connectionsRouter.post('/friends/new', connectionsController.friends)
+connectionsRouter.post('/connections/new/:id', connectionsController.newConnections)
+connectionsRouter.get('/connections/:id', connectionsController.getConnections)
 
 
 export default connectionsRouter
