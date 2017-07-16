@@ -41,7 +41,13 @@ let userSchema = new Schema({
   connections: {
     type: Schema.Types.ObjectId,
     ref:"Connections"
-  }
+  },
+  requests:[
+  {
+    title: {type: String, required: false, unique:true},
+    userRequest_id: {type: String, required: false, unique:true},
+    image: {type: String, required: false, unique:true},
+  }]
 }, {timestamps:true});
 
 userSchema.statics.addConnection = async function(id, args){

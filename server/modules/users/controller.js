@@ -140,3 +140,31 @@ export const getUsers = async (req, res)=>{
     return res.status(err.status).json({error: true, message:"There was an error"})
   }
 }
+
+
+export const addRequest =  async (req, res)=>{
+  console.log(req.body);
+  console.log("*********FWEDFWEFE************");
+  // console.log(req.body);
+  console.log(req.params.id);
+  const title = req.body.title
+  const image = req.body.image
+  const userRequest_id = req.body._id
+  const id = req.params.id
+  await User.findByIdAndUpdate(
+    id,
+    {$push: {"requests":{title: title, image: image, userRequest_id: userRequest_id}}},
+    {safe: true, upsert: true},
+    function(err, model){
+      console.log(err);
+    }
+  )
+   return res.status(200).json({message: 'request sent'})
+}
+
+export const getRequests = async (req, res)=>{
+  console.log("something was here ************");
+  console.log(req.params.id);
+
+  return res.status(200).json({requests: await User.findOne({'_id': req.params.id}, 'requests', function (err, docs) {})})
+}
