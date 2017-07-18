@@ -27,11 +27,11 @@ export const currentUser = async (req, res)=>{
   console.log(req.params.id);
   console.log(req.params.id);
 
-  console.log(req.id);
-  // req.params.id
   const{email} = req.body
   if(true){
     try {
+      const test = User.findOne({'_id': req.params.id}));
+      console.log(test,"does this do anything better????");
       return res.status(200).json({currentUser: await User.findOne({'_id': req.params.id})})
     }
     catch(err){
@@ -113,7 +113,7 @@ export const loginAuth = (req, res)=>{
     if (isValid){
       const password_digest = bcrypt.hashSync(password, 10)
       const newUser = new User({title, email, password, password_digest, passwordConfirmation, image, location})
-
+      console.log(newUser,"this is the new user info to be submited");
       try{
         console.log("something");
         const token = jwt.sign({
@@ -121,7 +121,8 @@ export const loginAuth = (req, res)=>{
           title: newUser.title,
           email: newUser.email,
         }, config.jwtSecret)
-        await newUser.save()
+        console.log(token,"this is a JSON WEB TOKEN");
+        newUser.save()
         return res.status(200).json({token: await token})
       }
       catch (err){
@@ -147,13 +148,12 @@ export const addRequest =  async (req, res)=>{
   console.log("*********FWEDFWEFE************");
   // console.log(req.body);
   console.log(req.params.id);
-  const title = req.body.title
-  const image = req.body.image
-  const userRequest_id = req.body._id
-  const id = req.params.id
+  const request_user_id = req.params.id
+  const id = req.body._id
+
   await User.findByIdAndUpdate(
     id,
-    {$push: {"requests":{title: title, image: image, userRequest_id: userRequest_id}}},
+    {$push: {"requests":{title: title, image: image, request_user_id: request_user_id}}},
     {safe: true, upsert: true},
     function(err, model){
       console.log(err);
@@ -167,4 +167,33 @@ export const getRequests = async (req, res)=>{
   console.log(req.params.id);
 
   return res.status(200).json({requests: await User.findOne({'_id': req.params.id}, 'requests', function (err, docs) {})})
+}
+
+
+export const newConnections =  async (req, res)=>{
+  console.log("*********FWEDFWEFE************");
+  // console.log(req.body);
+  console.log(req.params.id);
+  const { title, email, image, location} = req.body
+  const connection_id = req.body._id
+  console.log(connection_id);
+  const user_id = req.params.id
+  const newConnection = new User({title, email, image, location, user_id, connection_id})
+  //  try{
+  await newConnection.save()
+  return await res.status(200).json({message: 'Added new Nomad'})
+  // }
+  // catch (err){
+  //   return res.status(err.status).json({error: true, message:"There was an error"})
+  // }
+}
+
+
+export const getConnections = async (req, res)=>{
+  try {
+    return res.status(200).json({connections: await User.find({'user_id': req.params.id})})
+  }
+  catch (err){
+    return res.status(err.status).json({error: true, message:"There was an error"})
+  }
 }
