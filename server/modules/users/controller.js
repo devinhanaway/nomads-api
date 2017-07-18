@@ -89,7 +89,8 @@ export const loginAuth = (req, res)=>{
         const token = jwt.sign({
           id: user.id,
           title: user.title,
-          email: user.email
+          email: user.email,
+          image: user.image
         }, config.jwtSecret)
         return res.status(200).json({token: token})
       }else{
@@ -106,7 +107,8 @@ export const loginAuth = (req, res)=>{
 }
 }
 
- export const signup = async (req, res)=>{
+ export const signup = (req, res, next)=>{
+   console.log(req.body);
 
   const {errors, isValid } = validateSignup(req.body);
   const { title, email, password, passwordConfirmation, image, location} = req.body
@@ -114,24 +116,61 @@ export const loginAuth = (req, res)=>{
       const password_digest = bcrypt.hashSync(password, 10)
       const newUser = new User({title, email, password, password_digest, passwordConfirmation, image, location})
       console.log(newUser,"this is the new user info to be submited");
-      try{
-        console.log("something");
-        const token = jwt.sign({
+          const token =jwt.sign({
           id: newUser.id,
           title: newUser.title,
           email: newUser.email,
+          image: newUser.image
         }, config.jwtSecret)
+            console.log("Checking to see if it make it past jwt");
+           newUser.save().then(()=>{
+             "Does it save the new ueser"
+             return res.status(200).json({token: token})
+           }) .catch(function (err) {
+              next(err);
+            })
+
         console.log(token,"this is a JSON WEB TOKEN");
-          await newUser.save()
-          return await res.status(200).json({token: token})
-      }
-      catch (err){
-        return res.status(err.status).json({error: true, message:"There was an error"})
-      }
+          //
+          // await newUser.save()
+          //   return res.status(200).json({token: token})
     }else{
         res.status(400).json({errors})
       }
   }
+ // export const signup = async (req, res)=>{
+ //   console.log(req.body);
+ //
+ //  const {errors, isValid } = validateSignup(req.body);
+ //  const { title, email, password, passwordConfirmation, image, location} = req.body
+ //    if (isValid){
+ //      const password_digest = bcrypt.hashSync(password, 10)
+ //      const newUser = await new User({title, email, password, password_digest, passwordConfirmation, image, location})
+ //      console.log(newUser,"this is the new user info to be submited");
+ //      try{
+ //        console.log("something");
+ //
+ //        const getToken = async ()={
+ //          const token =jwt.sign({
+ //          id: newUser.id,
+ //          title: newUser.title,
+ //          email: newUser.email,
+ //          image: newUser.image
+ //        }, config.jwtSecret)
+ //        return token
+ //      }
+ //        console.log(token,"this is a JSON WEB TOKEN");
+ //          // newUser.save()
+ //          // return await res.status(200).json({token: await token})
+ //          await newUser.save()
+ //            return res.status(200).json({token: token})
+ //      } catch (err){
+ //        return res.status(err.status).json({error: true, message:"There was an error"})
+ //      }
+ //    }else{
+ //        res.status(400).json({errors})
+ //      }
+ //  }
 
 export const getUsers = async (req, res)=>{
   try {
@@ -150,6 +189,8 @@ export const addRequest =  async (req, res)=>{
   console.log(req.params.id);
   const request_user_id = req.params.id
   const id = req.body._id
+  const image = req.body.image
+  const title = req.body.title
 
   await User.findByIdAndUpdate(
     id,
@@ -165,6 +206,8 @@ export const addRequest =  async (req, res)=>{
 export const getRequests = async (req, res)=>{
   console.log("something was here ************");
   console.log(req.params.id);
+
+
 
   return res.status(200).json({requests: await User.findOne({'_id': req.params.id}, 'requests', function (err, docs) {})})
 }

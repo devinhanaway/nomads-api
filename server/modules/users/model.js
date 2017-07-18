@@ -38,20 +38,20 @@ let userSchema = new Schema({
     unique: false,
     required: true
   },
-  connections: {
-    type: Schema.Types.ObjectId,
-    ref:"Connections"
-  },
   requests:[
-  {
-    userRequest_id: {type: String, required: false, unique:false}
+    {
+    title: {type: String, required: false, unique:false},
+    userRequest_id: {type: String, required: false, unique:false},
+    image: {type: String, required: false, unique:false},
   }
-  ],
+],
   connections:[
     {
-    connection_user_id:{type: String, required: false, unique:false}
+    connection_user_id:{type: String, required: false, unique:false},
+    title: {type: String, required: false, unique:false},
+    image: {type: String, required: false, unique:false},
   }
-  ]
+]
 }, {timestamps:true});
 
 // userSchema.statics.addConnection = async function(id, args){
