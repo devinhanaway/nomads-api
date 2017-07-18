@@ -182,26 +182,48 @@ export const getUsers = async (req, res)=>{
 }
 
 
-export const addRequest =  async (req, res)=>{
+export const addRequest = async (req, res)=>{
   console.log(req.body);
   console.log("*********FWEDFWEFE************");
   // console.log(req.body);
   console.log(req.params.id);
-  const request_user_id = req.params.id
-  const id = req.body._id
+  const request_user_id = req.body.id
+  const id = req.params.id
   const image = req.body.image
   const title = req.body.title
+  console.log(id,"this is the id");
+  console.log(request_user_id,"request user id is here");
 
-  await User.findByIdAndUpdate(
+  User.findByIdAndUpdate(
     id,
     {$push: {"requests":{title: title, image: image, request_user_id: request_user_id}}},
     {safe: true, upsert: true},
     function(err, model){
-      console.log(err);
+      console.log(err,"this is the errors");
     }
   )
    return res.status(200).json({message: 'request sent'})
 }
+// export const addRequest =  async (req, res)=>{
+//   console.log(req.body);
+//   console.log("*********FWEDFWEFE************");
+//   // console.log(req.body);
+//   console.log(req.params.id);
+//   const request_user_id = req.body.id
+//   const id = req.params.id
+//   const image = req.body.image
+//   const title = req.body.title
+//
+//   await User.findByIdAndUpdate(
+//     id,
+//     {$push: {"requests":{title: title, image: image, request_user_id: request_user_id}}},
+//     {safe: true, upsert: true},
+//     function(err, model){
+//       console.log(err,"this is the errors");
+//     }
+//   )
+//    return res.status(200).json({message: 'request sent'})
+// }
 
 export const getRequests = async (req, res)=>{
   console.log("something was here ************");
