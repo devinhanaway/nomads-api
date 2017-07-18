@@ -44,12 +44,12 @@ let userSchema = new Schema({
   },
   requests:[
   {
-    userRequest_id: {type: String, required: false, unique:true}
+    userRequest_id: {type: String, required: false, unique:false}
   }
   ],
   connections:[
     {
-    connection_user_id:{type: String, required: false, unique:true}
+    connection_user_id:{type: String, required: false, unique:false}
   }
   ]
 }, {timestamps:true});

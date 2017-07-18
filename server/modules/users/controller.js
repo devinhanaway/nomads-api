@@ -30,7 +30,7 @@ export const currentUser = async (req, res)=>{
   const{email} = req.body
   if(true){
     try {
-      const test = User.findOne({'_id': req.params.id}));
+      const test = User.findOne({'_id': req.params.id})
       console.log(test,"does this do anything better????");
       return res.status(200).json({currentUser: await User.findOne({'_id': req.params.id})})
     }
@@ -122,8 +122,8 @@ export const loginAuth = (req, res)=>{
           email: newUser.email,
         }, config.jwtSecret)
         console.log(token,"this is a JSON WEB TOKEN");
-        newUser.save()
-        return res.status(200).json({token: await token})
+          await newUser.save()
+          return await res.status(200).json({token: token})
       }
       catch (err){
         return res.status(err.status).json({error: true, message:"There was an error"})
