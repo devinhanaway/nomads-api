@@ -19,7 +19,7 @@ export function validateSignup(data){
 }
 
 
-export const currentUser = async (req, res)=>{
+export const currentUser = (req, res)=>{
   // const{errors, isValid} = validateLogin(req.body)
   //req.id = req.params.id
   console.log("something was here ************");
@@ -29,14 +29,15 @@ export const currentUser = async (req, res)=>{
 
   const{email} = req.body
   if(true){
-    try {
+
       const test = User.findOne({'_id': req.params.id})
       console.log(test,"does this do anything better????");
-      return res.status(200).json({currentUser: await User.findOne({'_id': req.params.id})})
-    }
-    catch(err){
+       User.findOne({'_id': req.params.id}).then(currentUser=>{
+         return res.status(200).json({currentUser: currentUser})
+       })
+    .catch(err=>{
       return res.status(err.status).json({error: true, message:"User doesn't exist"})
-    }
+    })
   }
 }
 
@@ -172,13 +173,15 @@ export const loginAuth = (req, res)=>{
  //      }
  //  }
 
-export const getUsers = async (req, res)=>{
-  try {
-    return res.status(200).json({user: await User.find({})})
-  }
-  catch (err){
+export const getUsers = (req, res)=>{
+
+    User.find({})
+    .then(user=>{
+      return res.status(200).json({user: user})
+    })
+    .catch(err=>{
     return res.status(err.status).json({error: true, message:"There was an error"})
-  }
+  })
 }
 
 
@@ -191,47 +194,34 @@ export const addRequest = async (req, res)=>{
   const id = req.params.id
   const image = req.body.image
   const title = req.body.title
+  const location = req.body.location
+  const email = req.body.email
   console.log(id,"this is the id");
   console.log(request_user_id,"request user id is here");
 
   User.findByIdAndUpdate(
     id,
-    {$push: {"requests":{title: title, image: image, request_user_id: request_user_id}}},
+    {$push: {"requests":{title: title, image: image, request_user_id: request_user_id, location: location, email: email}}},
     {safe: true, upsert: true},
     function(err, model){
       console.log(err,"this is the errors");
     }
   )
-   return res.status(200).json({message: 'request sent'})
+  return res.status(200).json({message: 'request sent'})
 }
-// export const addRequest =  async (req, res)=>{
-//   console.log(req.body);
-//   console.log("*********FWEDFWEFE************");
-//   // console.log(req.body);
-//   console.log(req.params.id);
-//   const request_user_id = req.body.id
-//   const id = req.params.id
-//   const image = req.body.image
-//   const title = req.body.title
-//
-//   await User.findByIdAndUpdate(
-//     id,
-//     {$push: {"requests":{title: title, image: image, request_user_id: request_user_id}}},
-//     {safe: true, upsert: true},
-//     function(err, model){
-//       console.log(err,"this is the errors");
-//     }
-//   )
-//    return res.status(200).json({message: 'request sent'})
-// }
 
-export const getRequests = async (req, res)=>{
+
+export const getRequests = (req, res)=>{
   console.log("something was here ************");
   console.log(req.params.id);
-
-
-
-  return res.status(200).json({requests: await User.findOne({'_id': req.params.id}, 'requests', function (err, docs) {})})
+  User.findOne({'_id': req.params.id}, 'requests', function (err, docs) {})
+  .then(data=>{
+    console.log(data)
+    return res.status(200).json({requests: data})
+  })
+  .catch((err)=>{
+     console.log("failled",err)
+   })
 }
 
 
@@ -239,26 +229,40 @@ export const newConnections =  async (req, res)=>{
   console.log("*********FWEDFWEFE************");
   // console.log(req.body);
   console.log(req.params.id);
-  const { title, email, image, location} = req.body
-  const connection_id = req.body._id
-  console.log(connection_id);
-  const user_id = req.params.id
-  const newConnection = new User({title, email, image, location, user_id, connection_id})
-  //  try{
-  await newConnection.save()
-  return await res.status(200).json({message: 'Added new Nomad'})
+  const { title, image} = req.body
+  const connection_user_id = req.body._id
+  console.log(connection_user_id);
+  const id = req.params.id
+  const location = req.body.location
+  const email = req.body.email
+
+  User.findByIdAndUpdate(
+    id,
+    {$push: {"connections":{title: title, image: image, connection_user_id: connection_user_id, location: location, email: email}}},
+    {safe: true, upsert: true},
+    function(err, model){
+      console.log(err,"this is the errors");
+    }
+  ).then(data=>{
+    return res.status(200).json({message: data})
+  }).catch(err=>console.log(err))
+  //
   // }
   // catch (err){
   //   return res.status(err.status).json({error: true, message:"There was an error"})
   // }
 }
 
-
 export const getConnections = async (req, res)=>{
-  try {
-    return res.status(200).json({connections: await User.find({'user_id': req.params.id})})
-  }
-  catch (err){
-    return res.status(err.status).json({error: true, message:"There was an error"})
-  }
+  console.log("something was here ************");
+  console.log(req.params.id);
+  User.findOne({'_id': req.params.id}, 'connections', function (err, docs) {})
+  .then(data=>{
+    console.log(data)
+    return res.status(200).json({connections: data})
+  })
+  .catch((err)=>{
+     console.log("failled",err)
+   })
+
 }

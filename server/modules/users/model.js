@@ -43,6 +43,8 @@ let userSchema = new Schema({
     title: {type: String, required: false, unique:false},
     userRequest_id: {type: String, required: false, unique:false},
     image: {type: String, required: false, unique:false},
+    location: {type: String, required: false, unique:false},
+    email: {type: String, required: false, unique:false},
   }
 ],
   connections:[
@@ -50,25 +52,12 @@ let userSchema = new Schema({
     connection_user_id:{type: String, required: false, unique:false},
     title: {type: String, required: false, unique:false},
     image: {type: String, required: false, unique:false},
+    location: {type: String, required: false, unique:false},
+    email: {type: String, required: false, unique:false},
   }
 ]
 }, {timestamps:true});
 
-// userSchema.statics.addConnection = async function(id, args){
-//   const Connections = mongoose.model('Connections')
-//
-//   //add user id to conncetion
-//   const connections = await new Connections({ ...args, user: id })
-//
-//   //find group with id provided by url and push the meetup into the events element
-//   const user = await this.findByIdAndUpdate(id, { $push: { connections: connections.id } })
-//
-//
-//   return {
-//     connections: await connections.save({}),
-//     user
-//
-//   }
-// }
+
 
 export default mongoose.model('User', userSchema)
