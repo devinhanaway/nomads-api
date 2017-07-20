@@ -22,7 +22,7 @@ export function validateSignup(data){
 export const currentUser = (req, res)=>{
   // const{errors, isValid} = validateLogin(req.body)
   //req.id = req.params.id
-  console.log("something was here ************");
+  console.log("************currentUser was here ************");
   console.log(req.params);
   console.log(req.params.id);
   console.log(req.params.id);
@@ -73,7 +73,7 @@ function validateLogin(data){
 
 export const loginAuth = (req, res)=>{
   const {errors, isTrue } = validateLogin(req.body);
-  console.log("something was here ************");
+  console.log("******* login auth  was here ************");
   console.log(req.body);
   console.log(req.body.email);
 
@@ -174,13 +174,15 @@ export const loginAuth = (req, res)=>{
  //  }
 
 export const getUsers = (req, res)=>{
-
-    User.find({})
+    console.log(req.params.id,"*******GET ALL USERSSSSS EXPECT ME ********");
+    // {email: {$not: /@domain.com/}}
+    // User.find({id: {$ne: req.params.id}})
+    User.where("_id").ne(req.params.id)
     .then(user=>{
       return res.status(200).json({user: user})
     })
     .catch(err=>{
-    return res.status(err.status).json({error: true, message:"There was an error"})
+    console.log(err)
   })
 }
 
