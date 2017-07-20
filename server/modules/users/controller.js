@@ -225,7 +225,7 @@ export const getRequests = (req, res)=>{
 }
 
 
-export const newConnections =  async (req, res)=>{
+export const newConnections = async (req, res)=>{
   console.log("*********FWEDFWEFE************");
   // console.log(req.body);
   console.log(req.params.id);
@@ -243,9 +243,10 @@ export const newConnections =  async (req, res)=>{
     function(err, model){
       console.log(err,"this is the errors");
     }
-  ).then(data=>{
-    return res.status(200).json({message: data})
-  }).catch(err=>console.log(err))
+  )
+
+    return res.status(200).json({message: "connection added"})
+
   //
   // }
   // catch (err){
@@ -253,7 +254,7 @@ export const newConnections =  async (req, res)=>{
   // }
 }
 
-export const getConnections = async (req, res)=>{
+export const getConnections = (req, res)=>{
   console.log("something was here ************");
   console.log(req.params.id);
   User.findOne({'_id': req.params.id}, 'connections', function (err, docs) {})
