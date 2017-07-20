@@ -121,7 +121,8 @@ export const loginAuth = (req, res)=>{
           id: newUser.id,
           title: newUser.title,
           email: newUser.email,
-          image: newUser.image
+          image: newUser.image,
+          location: newUser.location
         }, config.jwtSecret)
             console.log("Checking to see if it make it past jwt");
            newUser.save().then(()=>{
@@ -177,7 +178,9 @@ export const getUsers = (req, res)=>{
     console.log(req.params.id,"*******GET ALL USERSSSSS EXPECT ME ********");
     // {email: {$not: /@domain.com/}}
     // User.find({id: {$ne: req.params.id}})
+    // User.find({ requests: { "$nin": [req.params.id]} })
     User.where("_id").ne(req.params.id)
+    // .where("requests._id").ne(req.params.id)
     .then(user=>{
       return res.status(200).json({user: user})
     })
@@ -185,6 +188,19 @@ export const getUsers = (req, res)=>{
     console.log(err)
   })
 }
+//
+// export const getUsers = (req, res)=>{
+//     console.log(req.params.id,"*******GET ALL USERSSSSS EXPECT ME ********");
+//     // {email: {$not: /@domain.com/}}
+//     // User.find({id: {$ne: req.params.id}})
+//     User.where("_id").ne(req.params.id).where("requests[0].requestLabel").equals(false)
+//     .then(user=>{
+//       return res.status(200).json({user: user})
+//     })
+//     .catch(err=>{
+//     console.log(err)
+//   })
+// }
 
 
 export const addRequest = async (req, res)=>{
@@ -201,9 +217,10 @@ export const addRequest = async (req, res)=>{
   console.log(id,"this is the id");
   console.log(request_user_id,"request user id is here");
 
+
   User.findByIdAndUpdate(
     id,
-    {$push: {"requests":{title: title, image: image, request_user_id: request_user_id, location: location, email: email}}},
+    {$push: {"requests":{title: title, image: image, request_user_id: request_user_id, location: location, email: email, requestLabel: true}}},
     {safe: true, upsert: true},
     function(err, model){
       console.log(err,"this is the errors");
@@ -261,7 +278,7 @@ export const getConnections = (req, res)=>{
   console.log(req.params.id);
   User.findOne({'_id': req.params.id}, 'connections', function (err, docs) {})
   .then(data=>{
-    console.log(data)
+    console.log("***********These are connections, is there a location***************",data)
     return res.status(200).json({connections: data})
   })
   .catch((err)=>{

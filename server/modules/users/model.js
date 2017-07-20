@@ -6,7 +6,7 @@ let userSchema = new Schema({
     type: String,
     unique: false,
     required: true
-  } ,
+  },
   email: {
     type: String,
     unique: true,
@@ -41,6 +41,7 @@ let userSchema = new Schema({
   requests:[
     {
     title: {type: String, required: false, unique:false},
+    requestLabel: {type: String, required: false, unique:false, default: "false"},
     userRequest_id: {type: String, required: false, unique:false},
     image: {type: String, required: false, unique:false},
     location: {type: String, required: false, unique:false},
@@ -50,6 +51,7 @@ let userSchema = new Schema({
   connections:[
     {
     connection_user_id:{type: String, required: false, unique:false},
+    requestLabel: {type: String, required: false, unique:false, default: "false"},
     title: {type: String, required: false, unique:false},
     image: {type: String, required: false, unique:false},
     location: {type: String, required: false, unique:false},
