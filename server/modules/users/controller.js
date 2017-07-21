@@ -124,7 +124,7 @@ export const loginAuth = (req, res)=>{
           image: newUser.image,
           location: newUser.location
         }, config.jwtSecret)
-            console.log("Checking to see if it make it past jwt");
+            console.log(token,"Checking to see if it make it past jwt");
            newUser.save().then(()=>{
              "Does it save the new ueser"
              return res.status(200).json({token: token})
