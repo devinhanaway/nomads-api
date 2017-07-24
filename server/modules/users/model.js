@@ -38,6 +38,15 @@ let userSchema = new Schema({
     unique: false,
     required: true
   },
+  requestsSent:[
+    {
+    title: {type: String, required: false, unique:false},
+    sentUser_id: {type: String, required: false, unique:false},
+    image: {type: String, required: false, unique:false},
+    location: {type: String, required: false, unique:false},
+    email: {type: String, required: false, unique:false},
+  }
+],
   requests:[
     {
     title: {type: String, required: false, unique:false},
